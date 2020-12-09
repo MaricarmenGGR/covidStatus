@@ -37,16 +37,13 @@ class ViewController: UIViewController {
             self.muertesLabel.text = "❌"
             self.imageViewBandera.image = #imageLiteral(resourceName: "quiestion")
             
-        }
+        }else{
         let peticion = URLRequest(url: urlAPI!)
         let tarea = URLSession.shared.dataTask(with: peticion) {datos,respuesta,error in
             if error != nil{
                 print(error?.localizedDescription ?? "not")
             }else{
                 do{
-                    if self.ciudadTextField.text == "" {
-                        print("Termino")
-                    }else{
                     let json = try JSONSerialization.jsonObject(with: datos!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String:Any];             print(json)
                     
                     if let mensaje = json["message"]{
@@ -89,15 +86,14 @@ class ViewController: UIViewController {
                     })
                     
                 }
-            }
-                
-                    
+                 
                 } catch {
                     print("Error al procesar Json")
                 }
             }
         }
         tarea.resume()
+    }
     }
 }
 
