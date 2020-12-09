@@ -24,7 +24,20 @@ class ViewController: UIViewController {
     @IBAction func buscarCiudadButton(_ sender: UIButton) {
         //let ciudadBuscada = ciudadTextField.text
         let urlAPI = URL(string:"https://corona.lmao.ninja/v3/covid-19/countries/\(self.ciudadTextField.text ?? "")")
-        
+        if ciudadTextField.text == "" {
+            
+            let alertaSText = UIAlertController(title: "PAIS NO ENCONTRADO", message: "No has escrito Nada aun! te invito a que escribas un Pais", preferredStyle: .alert)
+            let alertaSTexAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertaSText.addAction(alertaSTexAction)
+            self.present(alertaSText, animated: true, completion: nil)
+            
+            self.ciudadLabel.text = "❌"
+            self.casosConfirmadosLabel.text = "❌"
+            self.casosRecuperadosLabel.text = "❌"
+            self.muertesLabel.text = "❌"
+            
+            
+        }
         let peticion = URLRequest(url: urlAPI!)
         let tarea = URLSession.shared.dataTask(with: peticion) {datos,respuesta,error in
             if error != nil{
@@ -32,6 +45,22 @@ class ViewController: UIViewController {
             }else{
                 do{
                     let json = try JSONSerialization.jsonObject(with: datos!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String:Any];             print(json)
+                    if let mensaje = json["message"]{
+                        DispatchQueue.main.sync {
+                            let alertaSCovid = UIAlertController(title: "SIN CASOS EXISTENTES", message: "El pais no se ha encontrado o no tienen casos de Covid-19", preferredStyle: .alert)
+                            let alertsCovAction = UIAlertAction(title: "VALE", style: .default, handler: nil)
+                            alertaSCovid.addAction(alertsCovAction)
+                            self.present(alertaSCovid, animated: true, completion: nil)
+                            
+                            self.ciudadLabel.text = "❌"
+                            self.casosConfirmadosLabel.text = "❌"
+                            self.casosRecuperadosLabel.text = "❌"
+                            self.muertesLabel.text = "❌"
+                            
+                        }
+                        
+                        print(mensaje)
+                    }else{
                     //Sacar los Datos de JSON
                     let ciudad = json["country"] as! String?
                     let totalCasosConfirmados = json["cases"] as! Int?
@@ -49,10 +78,12 @@ class ViewController: UIViewController {
                             self.imageViewBandera.image = UIImage(data: data as Data)
                         }
                         self.ciudadLabel.text = ciudad
-                        self.casosConfirmadosLabel.text = String(totalCasosConfirmados!)
-                        self.casosRecuperadosLabel.text = String(totaldeRecuperados!)
-                        self.muertesLabel.text = String(totalDeMuertes!)
+                        self.casosConfirmadosLabel.text = String(totalCasosConfirmados!)+" personas"
+                        self.casosRecuperadosLabel.text = String(totaldeRecuperados!)+" personas"
+                        self.muertesLabel.text = String(totalDeMuertes!)+" personas"
                     })
+                    
+                }
                     
                 } catch {
                     print("Error al procesar Json")
