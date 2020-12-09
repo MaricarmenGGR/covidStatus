@@ -44,7 +44,11 @@ class ViewController: UIViewController {
                 print(error?.localizedDescription ?? "not")
             }else{
                 do{
+                    if self.ciudadTextField.text == "" {
+                        print("Termino")
+                    }else{
                     let json = try JSONSerialization.jsonObject(with: datos!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String:Any];             print(json)
+                    
                     if let mensaje = json["message"]{
                         DispatchQueue.main.sync {
                             let alertaSCovid = UIAlertController(title: "SIN CASOS EXISTENTES", message: "El pais no se ha encontrado o no tienen casos de Covid-19", preferredStyle: .alert)
@@ -85,6 +89,8 @@ class ViewController: UIViewController {
                     })
                     
                 }
+            }
+                
                     
                 } catch {
                     print("Error al procesar Json")
