@@ -35,7 +35,7 @@ class ViewController: UIViewController {
             self.casosConfirmadosLabel.text = "❌"
             self.casosRecuperadosLabel.text = "❌"
             self.muertesLabel.text = "❌"
-            
+            self.imageViewBandera.image = #imageLiteral(resourceName: "quiestion")
             
         }
         let peticion = URLRequest(url: urlAPI!)
@@ -56,6 +56,7 @@ class ViewController: UIViewController {
                             self.casosConfirmadosLabel.text = "❌"
                             self.casosRecuperadosLabel.text = "❌"
                             self.muertesLabel.text = "❌"
+                            self.imageViewBandera.image = #imageLiteral(resourceName: "quiestion")
                             
                         }
                         
